@@ -3,7 +3,7 @@
 set -euo pipefail
 
 DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/mzworthington/dotfiles.git}"
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/Documents/dev/dotfiles}"
 INSTALL_APPS="${INSTALL_APPS:-1}"
 INSTALL_AI="${INSTALL_AI:-1}"
 

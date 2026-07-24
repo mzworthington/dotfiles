@@ -11,14 +11,14 @@ Personal macOS machine setup: shell, tooling, and bootstrap scripts.
 Or, if you already have the repo:
 
 ```bash
-git clone https://github.com/mzworthington/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles && ./bootstrap.sh
+git clone https://github.com/mzworthington/dotfiles.git ~/Documents/dev/dotfiles
+cd ~/Documents/dev/dotfiles && ./bootstrap.sh
 ```
 
 Override clone location or workspace directory:
 
 ```bash
-DOTFILES_DIR=~/code/dotfiles DEV_DIRECTORY=~/code ./bootstrap.sh
+DOTFILES_DIR=~/.dotfiles DEV_DIRECTORY=~/code ./bootstrap.sh
 ```
 
 ## What it does
@@ -52,10 +52,10 @@ dotfiles/
 
 | Variable | Default | Purpose |
 |----------|---------|---------|
-| `DOTFILES_DIR` | `~/.dotfiles` | Where this repo lives |
+| `DOTFILES_DIR` | `~/Documents/dev/dotfiles` | Where this repo lives |
 | `DEV_DIRECTORY` | `~/Documents/dev` | Your project workspace |
 
-Shell config resolves `DOTFILES_DIR` from the `.zshrc` symlink location, so it works even if you clone elsewhere (e.g. `~/Documents/dev/dotfiles`).
+Shell config resolves `DOTFILES_DIR` from the `.zshrc` symlink location, so it works if you clone elsewhere (e.g. `~/.dotfiles`).
 
 Never hardcode usernames like `/Users/you/…`. Use `$HOME`, `~`, or these variables.
 

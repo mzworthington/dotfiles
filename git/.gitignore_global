@@ -1,0 +1,9 @@
+# AI/Agent Caches & Logs
+.cursor/
+.clinerules
+.anthropic/
+*.log
+node_modules/
+.venv/
+.ENV
+.env

@@ -1,0 +1,26 @@
+# Desktop apps and GUI tools (skip with INSTALL_APPS=0)
+cask "firefox"
+cask "github"
+cask "bitwarden"
+cask "nordvpn"
+cask "insomnia"
+cask "ssh-tunnel-manager"
+
+cask "intellij-idea-ce"
+cask "visual-studio-code"
+cask "antigravity"
+cask "devin-desktop"
+cask "cursor"
+
+cask "whatsapp"
+cask "slack"
+cask "signal"
+cask "zoom"
+
+cask "obsidian"
+cask "spotify"
+cask "raspberry-pi-imager"
+cask "dbeaver-community"
+cask "google-drive"
+
+brew "putty"

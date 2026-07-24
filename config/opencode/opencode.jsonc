@@ -1,0 +1,23 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "autoupdate": true,
+  "provider": {
+    "unsloth": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Unsloth (local)",
+      "options": {
+        "baseURL": "http://localhost:8888/v1",
+        "apiKey": "sk-unsloth-local"
+      },
+      "models": {
+        "unsloth": {
+          "name": "unsloth/Qwen3.5-4B-MTP-GGUUF",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        }
+      }
+    }
+  }
+}

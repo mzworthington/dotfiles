@@ -1,0 +1,9 @@
+# AI tooling (skip with INSTALL_AI=0)
+brew "gemini-cli"
+brew "ollama"
+brew "opencode"
+brew "cursor-cli"
+
+cask "claude-code"
+cask "google-gemini"
+cask "warp"

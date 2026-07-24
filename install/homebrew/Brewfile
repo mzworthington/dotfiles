@@ -1,0 +1,34 @@
+# Core CLI tools and dev dependencies
+brew "curl"
+brew "openssl@4"
+brew "wget"
+brew "ca-certificates"
+brew "speedtest-cli"
+brew "bmon"
+
+brew "git"
+brew "git-secrets"
+brew "pre-commit"
+
+brew "watch"
+brew "ripgrep"
+brew "mise"
+
+brew "asciidoc"
+brew "pandoc"
+brew "adr-tools"
+
+brew "graphviz"
+brew "plantuml"
+brew "d2"
+brew "librsvg"
+brew "jasper"
+
+brew "container"
+brew "container-compose"
+
+brew "cryptography"
+brew "bitwarden-cli"
+
+brew "prowler"
+brew "scorecard"

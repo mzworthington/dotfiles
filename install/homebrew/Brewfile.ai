@@ -2,7 +2,7 @@
 brew "gemini-cli"
 brew "ollama"
 brew "opencode"
-brew "cursor-cli"
+cask "cursor-cli"
 
 cask "claude-code"
 cask "google-gemini"

@@ -1,0 +1,22 @@
+# wk / kit / agent-kit — first-word commands
+_wk() {
+  local -a cmds
+  cmds=(
+    init mcp audit scan validate eval export-rules metrics verify sync
+    measure-context debug-board debug-ci check doctor ontology memory
+    model site commit-msg help
+  )
+  if (( CURRENT == 2 )); then
+    _describe 'command' cmds
+    return
+  fi
+  case ${words[2]} in
+    eval) _values 'eval' run watch report ci shadow dataset ;;
+    ontology) _values 'ontology' generate check ;;
+    memory) _values 'memory' lint ;;
+    model) _values 'model' resolve ;;
+    site) _values 'site' assemble ;;
+    mcp) _values 'profile' default collab ops security personal devtools cloud cloudflare-ops astro ;;
+  esac
+}
+compdef _wk wk kit agent-kit

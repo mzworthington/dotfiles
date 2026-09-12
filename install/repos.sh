@@ -16,6 +16,10 @@ clone_repo() {
 
   path="${path/#\~/$HOME}"
 
+  if [[ "${name}" == "waykit" && ! -d "${path}/.git" && -d "${DEV_DIRECTORY}/agent-lifecycle-kit/.git" ]]; then
+    path="${DEV_DIRECTORY}/agent-lifecycle-kit"
+  fi
+
   if [[ -d "${path}/.git" ]]; then
     echo "OK: ${name} already cloned at ${path}"
   else

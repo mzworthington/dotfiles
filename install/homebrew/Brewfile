@@ -32,3 +32,6 @@ brew "bitwarden-cli"
 
 brew "prowler"
 brew "scorecard"
+
+brew "cloudflared"
+brew "cloudflare-wrangler"

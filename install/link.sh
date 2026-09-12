@@ -37,8 +37,8 @@ link "${DOTFILES_DIR}/git/.gitignore_global" "${HOME}/.gitignore_global"
 link "${DOTFILES_DIR}/install/mise/config.toml" "${HOME}/.config/mise/config.toml"
 link "${DOTFILES_DIR}/config/opencode/opencode.jsonc" "${HOME}/.config/opencode/opencode.jsonc"
 
-if [[ -d "${DEV_DIRECTORY}/agent-lifecycle-kit" ]]; then
-  link "${DEV_DIRECTORY}/agent-lifecycle-kit" "${HOME}/.agents"
+if [[ -d "${DEV_DIRECTORY}/waykit" ]]; then
+  link "${DEV_DIRECTORY}/waykit" "${HOME}/.agents"
 fi
 
 if [[ ! -f "${HOME}/.secrets" ]]; then

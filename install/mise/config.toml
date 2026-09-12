@@ -24,4 +24,5 @@ yarn = "latest"
 yq = "latest"
 bitwarden-secrets-manager = "latest"
 buf = "latest"
+"github:mashiro/otelop" = "latest"
 

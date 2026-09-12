@@ -1,4 +1,4 @@
-ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="false"
 HIST_STAMPS="mm/dd/yyyy"
 
 export ZSH="$HOME/.oh-my-zsh"
@@ -46,6 +46,7 @@ eval "$(mise activate zsh)"
   local completions_dir="$DOTFILES_DIR/completions"
   [ -f "${completions_dir}/.mise" ] && source "${completions_dir}/.mise"
   [ -f "${completions_dir}/.bsw" ] && source "${completions_dir}/.bsw"
+  [ -f "${completions_dir}/.wk" ] && source "${completions_dir}/.wk"
   if command -v terraform &>/dev/null; then
     autoload -U +X bashcompinit && bashcompinit
     complete -o nospace -C "$(command -v terraform)" terraform
@@ -71,3 +72,8 @@ kill-port() {
 # Hugging Face download tuning
 export HF_XET_HIGH_PERFORMANCE=1
 export HF_XET_NUM_CONCURRENT_RANGE_GETS=64
+    
+export PATH="/Users/worthington/Documents/dev/archlens/app/dist:$PATH"
+
+# Sonar
+export SONARQUBE_ORG='mzworthington'

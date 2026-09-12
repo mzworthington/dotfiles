@@ -28,7 +28,7 @@ DOTFILES_DIR=~/.dotfiles DEV_DIRECTORY=~/code ./bootstrap.sh
 3. Installs Oh My Zsh (if missing)
 4. Links dotfiles into `~` via `install/link.sh`
 5. Installs packages via Homebrew + mise via `install/software.sh`
-6. Clones companion repos (e.g. [agent-lifecycle-kit](https://github.com/mzworthington/agent-lifecycle-kit))
+6. Clones companion repos (e.g. [Waykit](https://github.com/mzworthington/waykit))
 
 ## Structure
 
@@ -81,7 +81,7 @@ INSTALL_APPS=0 INSTALL_AI=0 ./bootstrap.sh
 
 Defined in `install/repos.conf`. Currently:
 
-- **agent-lifecycle-kit** → `$DEV_DIRECTORY/agent-lifecycle-kit` (symlinked to `~/.agents`)
+- **Waykit** → `$DEV_DIRECTORY/waykit` (symlinked to `~/.agents`; existing `$DEV_DIRECTORY/agent-lifecycle-kit` checkouts are reused)
 
 ## License
 

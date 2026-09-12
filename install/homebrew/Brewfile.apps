@@ -19,8 +19,18 @@ cask "zoom"
 
 cask "obsidian"
 cask "spotify"
-cask "raspberry-pi-imager"
 cask "dbeaver-community"
 cask "google-drive"
 
 brew "putty"
+cask "bruno"
+cask "sonarqube-cli"
+
+
+# Tinkering
+cask "swiftbar"
+cask "raspberry-pi-imager"
+brew "platformio"
+brew "sdl2" 
+brew "sdl2_image" 
+brew "sdl2_ttf"

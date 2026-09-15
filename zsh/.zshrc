@@ -34,6 +34,7 @@ alias gitconfig='git config --list --show-origin'
 alias gitme="git config user.email"
 alias docs="cd ~/Documents"
 alias dev="cd $DEV_DIRECTORY"
+alias repos="$DOTFILES_DIR/install/repos.sh"
 alias software="$DOTFILES_DIR/install/software.sh"
 alias acode="antigravity-ide"
 

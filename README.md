@@ -1,5 +1,7 @@
 # dotfiles
 
+[![Quality gate](https://img.shields.io/sonar/alert_status/mzworthington_dotfiles?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarqube)](https://sonarcloud.io/summary/new_code?id=mzworthington_dotfiles)
+
 Personal macOS machine setup: shell, tooling, and bootstrap scripts.
 
 ## Quick start (fresh machine)
@@ -34,6 +36,7 @@ DOTFILES_DIR=~/.dotfiles DEV_DIRECTORY=~/code ./bootstrap.sh
 
 ```text
 dotfiles/
+├── .github/actions/          # reusable GitHub Actions (e.g. detect-release-changes)
 ├── bootstrap.sh              # one-command fresh machine setup
 ├── install/
 │   ├── link.sh               # symlink home → repo

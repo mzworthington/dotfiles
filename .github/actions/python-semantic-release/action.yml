@@ -1,0 +1,20 @@
+name: Python semantic-release
+description: Seed a baseline v* tag if needed, then run python-semantic-release version and publish
+inputs:
+  tag-match:
+    description: glob passed to git describe --match
+    required: false
+    default: "v*"
+  pyproject:
+    description: Path to pyproject.toml
+    required: false
+    default: pyproject.toml
+runs:
+  using: composite
+  steps:
+    - name: Semantic-release
+      shell: bash
+      env:
+        TAG_MATCH: ${{ inputs.tag-match }}
+        PYPROJECT: ${{ inputs.pyproject }}
+      run: bash "${{ github.action_path }}/python-semantic-release.sh"

@@ -1,0 +1,36 @@
+name: Python mise verify
+description: Install mise, bootstrap, optionally pre-commit, test, and publish JUnit
+inputs:
+  pre-commit:
+    description: Run .venv/bin/pre-commit --all-files after bootstrap
+    required: false
+    default: "false"
+  junit-report:
+    description: JUnit XML path for the report action
+    required: false
+    default: junit/test-results.xml
+runs:
+  using: composite
+  steps:
+    - name: Install mise
+      uses: jdx/mise-action@v4
+
+    - name: Bootstrap
+      shell: bash
+      run: make bootstrap
+
+    - name: Pre-commit
+      if: ${{ inputs.pre-commit == 'true' }}
+      shell: bash
+      run: .venv/bin/pre-commit run --all-files
+
+    - name: Test
+      shell: bash
+      run: make test
+
+    - name: Publish Test Report
+      if: always()
+      uses: mikepenz/action-junit-report@v6
+      with:
+        report_paths: ${{ inputs.junit-report }}
+        github_token: ${{ github.token }}

@@ -36,7 +36,7 @@ DOTFILES_DIR=~/.dotfiles DEV_DIRECTORY=~/code ./bootstrap.sh
 
 ```text
 dotfiles/
-├── .github/actions/          # reusable GitHub Actions (e.g. detect-release-changes)
+├── .github/actions/          # reusable GitHub Actions (detect-release-changes, python-mise-verify, python-semantic-release)
 ├── bootstrap.sh              # one-command fresh machine setup
 ├── install/
 │   ├── link.sh               # symlink home → repo

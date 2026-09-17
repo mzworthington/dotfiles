@@ -1,0 +1,26 @@
+name: Detect release changes
+description: Require a release when listed paths changed since the latest matching git tag
+inputs:
+  paths:
+    description: Pathspecs to diff against the last tag (space or newline separated)
+    required: true
+  tag-match:
+    description: glob passed to git describe --match
+    required: false
+    default: "v*"
+outputs:
+  release:
+    description: true when a release is required
+    value: ${{ steps.detect.outputs.release }}
+  last_tag:
+    description: Latest matching tag when one exists
+    value: ${{ steps.detect.outputs.last_tag }}
+runs:
+  using: composite
+  steps:
+    - id: detect
+      shell: bash
+      env:
+        PATHS: ${{ inputs.paths }}
+        TAG_MATCH: ${{ inputs.tag-match }}
+      run: bash "${{ github.action_path }}/detect-release-changes.sh"

@@ -9,7 +9,7 @@ python_bin="$(command -v python || command -v python3)"
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-if ! git describe --tags --match "${tag_match}" >/dev/null 2>&1; then
+if [ -z "$(git tag -l "${tag_match}")" ]; then
   VERSION="$(
     PYPROJECT_PATH="${pyproject}" "${python_bin}" -c \
       'import os, tomllib; print(tomllib.load(open(os.environ["PYPROJECT_PATH"], "rb"))["project"]["version"])'

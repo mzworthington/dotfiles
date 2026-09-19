@@ -6,13 +6,13 @@ tag_match="${TAG_MATCH:-v*}"
 
 git fetch --tags --force >/dev/null 2>&1 || true
 
-if ! git describe --tags --match "${tag_match}" --abbrev=0 >/dev/null 2>&1; then
+last_tag="$(git for-each-ref --sort=-v:refname --format='%(refname:short)' --count=1 "refs/tags/${tag_match}")"
+if [ -z "${last_tag}" ]; then
   echo "release=true" >> "${output}"
   echo "No previous release tag found; release required."
   exit 0
 fi
 
-last_tag="$(git describe --tags --match "${tag_match}" --abbrev=0)"
 echo "last_tag=${last_tag}" >> "${output}"
 
 # Split on IFS whitespace so GitHub multiline `paths:` inputs work.

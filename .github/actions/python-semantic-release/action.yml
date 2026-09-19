@@ -2,7 +2,7 @@ name: Python semantic-release
 description: Seed a baseline v* tag if needed, then run python-semantic-release version and publish
 inputs:
   tag-match:
-    description: glob passed to git describe --match
+    description: glob for git tag refs (e.g. v*)
     required: false
     default: "v*"
   pyproject:

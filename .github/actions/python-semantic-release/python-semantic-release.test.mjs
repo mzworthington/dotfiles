@@ -70,6 +70,18 @@ test("skips publish when semantic-release will not cut a version", async () => {
   assert.deepEqual(tags(cwd).sort(), ["v1.0.0"]);
 });
 
+test("does not retag pyproject version when a v-star tag exists but does not describe HEAD", async () => {
+  const cwd = await initRepo();
+  execFileSync("git", ["checkout", "--orphan", "other"], { cwd });
+  writeFileSync(join(cwd, "other.txt"), "x\n");
+  execFileSync("git", ["add", "other.txt"], { cwd });
+  execFileSync("git", ["commit", "-m", "orphan"], { cwd });
+  execFileSync("git", ["tag", "v1.2.3"], { cwd });
+  execFileSync("git", ["checkout", "main"], { cwd });
+  execFileSync("bash", [script], { cwd });
+  assert.deepEqual(tags(cwd), ["v1.2.3"]);
+});
+
 test("runs version, fast-forwards main, and publishes when a release is due", async () => {
   const cwd = await initRepo();
   execFileSync("git", ["tag", "v1.0.0"], { cwd });

@@ -41,6 +41,17 @@ test("requires a release when no v-star tag exists", async () => {
   assert.match(detect(cwd), /^release=true$/m);
 });
 
+test("uses an existing v-star tag when describe cannot see HEAD", async () => {
+  const cwd = await initRepo();
+  execFileSync("git", ["checkout", "--orphan", "other"], { cwd });
+  await writeFile(join(cwd, "other.txt"), "x\n");
+  execFileSync("git", ["add", "other.txt"], { cwd });
+  execFileSync("git", ["commit", "-m", "orphan"], { cwd });
+  execFileSync("git", ["tag", "v1.0.0"], { cwd });
+  execFileSync("git", ["checkout", "main"], { cwd });
+  assert.match(detect(cwd), /^last_tag=v1.0.0$/m);
+});
+
 test("skips release when listed paths are unchanged since the last tag", async () => {
   const cwd = await initRepo();
   execFileSync("git", ["tag", "v1.0.0"], { cwd });

@@ -5,7 +5,7 @@ inputs:
     description: Pathspecs to diff against the last tag (space or newline separated)
     required: true
   tag-match:
-    description: glob passed to git describe --match
+    description: glob for git tag refs (e.g. v*)
     required: false
     default: "v*"
 outputs:

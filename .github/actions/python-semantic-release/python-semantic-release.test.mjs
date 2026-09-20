@@ -113,6 +113,23 @@ test("force-level minor still publishes when print would skip", async () => {
   assert.doesNotMatch(calls, /^version --print$/m);
 });
 
+test("bumps from the latest v-star tag when print reports a stale 0.1.0 skip", async () => {
+  const cwd = await initRepo();
+  execFileSync("git", ["tag", "v1.2.3"], { cwd });
+  writeStub(
+    cwd,
+    "0.1.0\nNo release will be made, 0.1.0 has already been released!",
+  );
+  const origin = await mkdtemp(join(tmpdir(), "python-release-origin-"));
+  execFileSync("git", ["clone", "--bare", cwd, origin]);
+  execFileSync("git", ["remote", "add", "origin", origin], { cwd });
+  execFileSync("bash", [script], { cwd });
+  const calls = readFileSync(join(cwd, ".sr-calls"), "utf8");
+  assert.match(calls, /^version --print$/m);
+  assert.match(calls, /^version --minor$/m);
+  assert.match(calls, /^publish$/m);
+});
+
 test("attaches detached HEAD to main so a due release is not skipped", async () => {
   const cwd = await initRepo();
   execFileSync("git", ["tag", "v1.0.0"], { cwd });

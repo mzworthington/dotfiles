@@ -42,6 +42,17 @@ esac
 print_log="$(semantic-release version --print 2>&1 || true)"
 printf '%s\n' "${print_log}"
 if printf '%s\n' "${print_log}" | grep -qiE 'No release will be made|No release will be created'; then
+  printed="$(printf '%s\n' "${print_log}" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+' | head -n 1 || true)"
+  highest="$(git for-each-ref --sort=-v:refname --format='%(refname:short)' --count=1 "refs/tags/${tag_match}")"
+  highest_ver="${highest#v}"
+  if [ -n "${printed}" ] && [ -n "${highest_ver}" ] && [ "${printed}" != "${highest_ver}" ] && [ "$(printf '%s\n' "${printed}" "${highest_ver}" | sort -V | head -n 1)" = "${printed}" ]; then
+    echo "PSR printed ${printed} but latest tag is ${highest}; bumping minor from the tag list."
+    semantic-release version --minor
+    git fetch origin main
+    git pull --ff-only origin main
+    semantic-release publish
+    exit 0
+  fi
   echo "No semantic-release version to cut; skipping publish."
   exit 0
 fi

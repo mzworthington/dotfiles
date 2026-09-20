@@ -95,3 +95,39 @@ test("runs version, fast-forwards main, and publishes when a release is due", as
   assert.match(calls, /^version$/m);
   assert.match(calls, /^publish$/m);
 });
+
+test("attaches detached HEAD to main so a due release is not skipped", async () => {
+  const cwd = await initRepo();
+  execFileSync("git", ["tag", "v1.0.0"], { cwd });
+  const binDir = join(cwd, ".venv", "bin");
+  mkdirSync(binDir, { recursive: true });
+  writeFileSync(
+    join(binDir, "semantic-release"),
+    `#!/usr/bin/env bash
+set -euo pipefail
+printf '%s\\n' "$*" >> "\${PWD}/.sr-calls"
+if ! git symbolic-ref -q HEAD >/dev/null; then
+  echo "No release will be made, 0.1.0 has already been released!"
+  exit 0
+fi
+if [[ "\${1:-}" == "version" && "\${2:-}" == "--print" ]]; then
+  echo "1.2.4"
+  exit 0
+fi
+if [[ "\${1:-}" == "version" || "\${1:-}" == "publish" ]]; then
+  exit 0
+fi
+echo "unexpected args: $*" >&2
+exit 1
+`,
+  );
+  chmodSync(join(binDir, "semantic-release"), 0o755);
+  const origin = await mkdtemp(join(tmpdir(), "python-release-origin-"));
+  execFileSync("git", ["clone", "--bare", cwd, origin]);
+  execFileSync("git", ["remote", "add", "origin", origin], { cwd });
+  execFileSync("git", ["checkout", "--detach"], { cwd });
+  execFileSync("bash", [script], { cwd });
+  const calls = readFileSync(join(cwd, ".sr-calls"), "utf8");
+  assert.match(calls, /^version$/m);
+  assert.match(calls, /^publish$/m);
+});

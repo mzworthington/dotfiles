@@ -9,6 +9,11 @@ python_bin="$(command -v python || command -v python3)"
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+git fetch --tags --force origin >/dev/null 2>&1 || git fetch --tags --force >/dev/null 2>&1 || true
+if ! git symbolic-ref -q HEAD >/dev/null; then
+  git checkout -B main HEAD
+fi
+
 if [ -z "$(git tag -l "${tag_match}")" ]; then
   VERSION="$(
     PYPROJECT_PATH="${pyproject}" "${python_bin}" -c \

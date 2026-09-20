@@ -9,6 +9,10 @@ inputs:
     description: Path to pyproject.toml
     required: false
     default: pyproject.toml
+  force-level:
+    description: If patch, minor, or major, bump from the highest v* tag and publish
+    required: false
+    default: ""
 runs:
   using: composite
   steps:
@@ -17,4 +21,5 @@ runs:
       env:
         TAG_MATCH: ${{ inputs.tag-match }}
         PYPROJECT: ${{ inputs.pyproject }}
+        FORCE_LEVEL: ${{ inputs.force-level }}
       run: bash "${{ github.action_path }}/python-semantic-release.sh"

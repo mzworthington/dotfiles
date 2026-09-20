@@ -23,6 +23,22 @@ if [ -z "$(git tag -l "${tag_match}")" ]; then
   echo "Seeded baseline tag v${VERSION} from ${pyproject}"
 fi
 
+force_level="${FORCE_LEVEL:-}"
+case "${force_level}" in
+  "") ;;
+  patch | minor | major)
+    semantic-release version "--${force_level}"
+    git fetch origin main
+    git pull --ff-only origin main
+    semantic-release publish
+    exit 0
+    ;;
+  *)
+    echo "FORCE_LEVEL must be patch, minor, or major (got ${force_level})" >&2
+    exit 1
+    ;;
+esac
+
 print_log="$(semantic-release version --print 2>&1 || true)"
 printf '%s\n' "${print_log}"
 if printf '%s\n' "${print_log}" | grep -qiE 'No release will be made|No release will be created'; then

@@ -96,6 +96,23 @@ test("runs version, fast-forwards main, and publishes when a release is due", as
   assert.match(calls, /^publish$/m);
 });
 
+test("force-level minor still publishes when print would skip", async () => {
+  const cwd = await initRepo();
+  execFileSync("git", ["tag", "v1.0.0"], { cwd });
+  writeStub(cwd, "No release will be made, 0.1.0 has already been released!");
+  const origin = await mkdtemp(join(tmpdir(), "python-release-origin-"));
+  execFileSync("git", ["clone", "--bare", cwd, origin]);
+  execFileSync("git", ["remote", "add", "origin", origin], { cwd });
+  execFileSync("bash", [script], {
+    cwd,
+    env: { ...process.env, FORCE_LEVEL: "minor" },
+  });
+  const calls = readFileSync(join(cwd, ".sr-calls"), "utf8");
+  assert.match(calls, /^version --minor$/m);
+  assert.match(calls, /^publish$/m);
+  assert.doesNotMatch(calls, /^version --print$/m);
+});
+
 test("attaches detached HEAD to main so a due release is not skipped", async () => {
   const cwd = await initRepo();
   execFileSync("git", ["tag", "v1.0.0"], { cwd });

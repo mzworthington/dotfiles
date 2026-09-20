@@ -45,6 +45,7 @@ dotfiles/
 │   ├── homebrew/             # Brewfile (core, apps, ai)
 │   ├── mise/config.toml      # language/tool versions
 │   └── setup_local_ai.sh     # optional local AI setup
+├── bin/                      # PATH shims (docker → Apple container)
 ├── zsh/                      # .zshrc, .zprofile
 ├── completions/              # shell completions
 ├── config/                   # app config fragments
@@ -79,6 +80,8 @@ INSTALL_APPS=0 INSTALL_AI=0 ./bootstrap.sh
 # Update software only
 ./install/software.sh
 ```
+
+Homebrew `container` is the Docker replacement. `bin/docker` and `bin/docker-compose` translate common Docker commands (`ps`, `images`, `pull`, `compose`, …) onto Apple’s CLI; native commands (`container ls`, `container run`) still work.
 
 ## Companion repos
 

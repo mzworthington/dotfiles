@@ -23,8 +23,6 @@ touch "$HOME/.gemini/GEMINI.md"
 
 alias zshconfig="$EDITOR $HOME/.zshrc"
 alias ohmyzsh="$EDITOR $HOME/.oh-my-zsh"
-alias docker="container"
-alias docker-compose="container-compose"
 alias please="make"
 alias ls='ls -fla'
 alias c='clear'
@@ -78,3 +76,13 @@ export PATH="/Users/worthington/Documents/dev/archlens/app/dist:$PATH"
 
 # Sonar
 export SONARQUBE_ORG='mzworthington'
+
+export CLAUDE_CODE_ENABLE_TELEMETRY="1"
+export OTEL_METRICS_EXPORTER="otlp"
+export OTEL_LOGS_EXPORTER="otlp"
+export OTEL_EXPORTER_OTLP_PROTOCOL="http/protobuf"
+export OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4318"
+export SIGNOZ_URL="${SIGNOZ_URL:-http://localhost:8080}"
+
+# After mise/homebrew PATH mutations so these win over brew `docker`.
+export PATH="$DOTFILES_DIR/bin:$PATH"

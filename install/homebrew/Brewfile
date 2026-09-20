@@ -5,6 +5,7 @@ brew "wget"
 brew "ca-certificates"
 brew "speedtest-cli"
 brew "bmon"
+brew "nmap"
 
 brew "git"
 brew "git-secrets"

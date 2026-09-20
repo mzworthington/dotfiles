@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+container_bin="${CONTAINER_BIN:-container}"
+compose_bin="${CONTAINER_COMPOSE_BIN:-container-compose}"
+
+if [[ "${1:-}" == "ps" ]]; then
+  shift
+  exec "${container_bin}" list "$@"
+fi
+
+if [[ "${1:-}" == "images" ]]; then
+  shift
+  exec "${container_bin}" image list "$@"
+fi
+
+if [[ "${1:-}" == "pull" ]]; then
+  shift
+  exec "${container_bin}" image pull "$@"
+fi
+
+if [[ "${1:-}" == "push" ]]; then
+  shift
+  exec "${container_bin}" image push "$@"
+fi
+
+if [[ "${1:-}" == "rmi" ]]; then
+  shift
+  exec "${container_bin}" image delete "$@"
+fi
+
+if [[ "${1:-}" == "compose" ]]; then
+  shift
+  exec "${compose_bin}" "$@"
+fi
+
+if [[ "${1:-}" == "version" || "${1:-}" == "--version" ]]; then
+  exec "${container_bin}" --version
+fi
+
+if [[ "${1:-}" == "info" ]]; then
+  exec "${container_bin}" system status
+fi
+
+exec "${container_bin}" "$@"

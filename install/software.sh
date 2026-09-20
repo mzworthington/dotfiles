@@ -34,6 +34,12 @@ if [[ "${INSTALL_AI}" == "1" && -f "${INSTALL_DIR}/homebrew/Brewfile.ai" ]]; the
     || brew bundle --file "${INSTALL_DIR}/homebrew/Brewfile.ai"
 fi
 
+if command -v container &>/dev/null; then
+  echo "==> Starting Apple container at login…"
+  brew services start container
+  container system start || true
+fi
+
 echo "==> Cleaning up Homebrew…"
 brew cleanup
 

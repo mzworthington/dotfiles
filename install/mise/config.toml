@@ -24,5 +24,16 @@ yarn = "latest"
 yq = "latest"
 bitwarden-secrets-manager = "latest"
 buf = "latest"
-"github:mashiro/otelop" = "latest"
+"github:SigNoz/foundry" = "0.2.17"
+"github:SigNoz/signoz-mcp-server" = "0.14.0"
+
+# Community SigNoz Docker (UI :8080, OTLP :4318). GUI Cursor from Dock does not inherit this.
+# SIGNOZ_API_KEY stays in ~/.secrets (never commit).
+[env]
+SIGNOZ_URL = "http://localhost:8080"
+CLAUDE_CODE_ENABLE_TELEMETRY = "1"
+OTEL_METRICS_EXPORTER = "otlp"
+OTEL_LOGS_EXPORTER = "otlp"
+OTEL_EXPORTER_OTLP_PROTOCOL = "http/protobuf"
+OTEL_EXPORTER_OTLP_ENDPOINT = "http://localhost:4318"
 

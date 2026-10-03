@@ -145,7 +145,8 @@ test("drops GITHUB_OUTPUT for version --no-tag so a missing commit_sha does not 
   git(cwd, ["tag", "v1.0.0"]);
   writeStub(cwd, {
     print: "1.2.4",
-    onNoPush: `if [[ "\${1:-}" == "version" && " \$* " == *" --no-tag "* && -n "\${GITHUB_OUTPUT:-}" ]]; then
+    onNoPush: `printf 'env=%s args=%s\\n' "\${GITHUB_OUTPUT-<unset>}" "\$*" >> "\${PWD}/.sr-calls"
+if [[ "\${1:-}" == "version" && " \$* " == *" --no-tag "* && -n "\${GITHUB_OUTPUT:-}" ]]; then
   echo "some required outputs were not set: commit_sha" >&2
   exit 1
 fi
@@ -155,7 +156,7 @@ fi
   const outputFile = join(cwd, "gha-output");
   writeFileSync(outputFile, "");
   run(cwd, { GITHUB_OUTPUT: outputFile });
-  assert.match(srCalls(cwd), /^version --no-push --no-tag$/m);
+  assert.equal(srCalls(cwd), "SEE");
 });
 
 test("runs version, fast-forwards main, and publishes when a release is due", async () => {

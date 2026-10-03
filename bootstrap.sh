@@ -25,7 +25,7 @@ fi
 
 if ! command -v brew &>/dev/null; then
   echo "==> Installing Homebrew…"
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  /bin/bash -c "$(curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 if [[ -x /opt/homebrew/bin/brew ]]; then
@@ -46,7 +46,7 @@ fi
 if [[ ! -d "${HOME}/.oh-my-zsh" ]]; then
   echo "==> Installing Oh My Zsh…"
   RUNZSH=no CHSH=no KEEP_ZSHRC=yes \
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    sh -c "$(curl --proto '=https' --tlsv1.2 -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
 "${DOTFILES_DIR}/install/link.sh"

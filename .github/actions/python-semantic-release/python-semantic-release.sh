@@ -14,7 +14,7 @@ if ! git symbolic-ref -q HEAD >/dev/null; then
   git checkout -B main HEAD
 fi
 
-if [ -z "$(git tag -l "${tag_match}")" ]; then
+if [[ -z "$(git tag -l "${tag_match}")" ]]; then
   VERSION="$(
     PYPROJECT_PATH="${pyproject}" "${python_bin}" -c \
       'import os, tomllib; print(tomllib.load(open(os.environ["PYPROJECT_PATH"], "rb"))["project"]["version"])'
@@ -31,7 +31,7 @@ publish_release() {
   before="$(git rev-parse HEAD)"
   semantic-release version "$@" --no-push --no-tag
   after="$(git rev-parse HEAD)"
-  if [ "${before}" = "${after}" ]; then
+  if [[ "${before}" == "${after}" ]]; then
     echo "No release commit; skipping push."
     semantic-release publish
     return 0
@@ -48,7 +48,7 @@ publish_release() {
   )"
   tag="v${version}"
   if git rev-parse -q --verify "refs/tags/${tag}" >/dev/null; then
-    if [ "$(git rev-parse "${tag}^{}")" != "$(git rev-parse HEAD)" ]; then
+    if [[ "$(git rev-parse "${tag}^{}")" != "$(git rev-parse HEAD)" ]]; then
       echo "Tag ${tag} already points at a different commit" >&2
       exit 1
     fi
@@ -57,13 +57,13 @@ publish_release() {
   fi
 
   branch="$(git rev-parse --abbrev-ref HEAD)"
-  if [ "${branch}" = "HEAD" ]; then
+  if [[ "${branch}" == "HEAD" ]]; then
     branch="main"
   fi
   git push origin "HEAD:${branch}"
   git push origin "refs/tags/${tag}"
 
-  if [ "${GITHUB_ACTIONS:-}" = "true" ] && command -v gh >/dev/null; then
+  if [[ "${GITHUB_ACTIONS:-}" == "true" ]] && command -v gh >/dev/null; then
     if ! gh release view "${tag}" >/dev/null 2>&1; then
       notes="$(
         awk -v heading="## ${tag} " '
@@ -97,7 +97,7 @@ if printf '%s\n' "${print_log}" | grep -qiE 'No release will be made|No release 
   printed="$(printf '%s\n' "${print_log}" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+' | head -n 1 || true)"
   highest="$(git for-each-ref --sort=-v:refname --format='%(refname:short)' --count=1 "refs/tags/${tag_match}")"
   highest_ver="${highest#v}"
-  if [ -n "${printed}" ] && [ -n "${highest_ver}" ] && [ "${printed}" != "${highest_ver}" ] && [ "$(printf '%s\n' "${printed}" "${highest_ver}" | sort -V | head -n 1)" = "${printed}" ]; then
+  if [[ -n "${printed}" && -n "${highest_ver}" && "${printed}" != "${highest_ver}" && "$(printf '%s\n' "${printed}" "${highest_ver}" | sort -V | head -n 1)" == "${printed}" ]]; then
     echo "PSR printed ${printed} but latest tag is ${highest}; bumping minor from the tag list."
     publish_release --minor
     exit 0

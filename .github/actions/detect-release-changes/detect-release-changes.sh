@@ -7,7 +7,7 @@ tag_match="${TAG_MATCH:-v*}"
 git fetch --tags --force >/dev/null 2>&1 || true
 
 last_tag="$(git for-each-ref --sort=-v:refname --format='%(refname:short)' --count=1 "refs/tags/${tag_match}")"
-if [ -z "${last_tag}" ]; then
+if [[ -z "${last_tag}" ]]; then
   echo "release=true" >> "${output}"
   echo "No previous release tag found; release required."
   exit 0
@@ -18,7 +18,7 @@ echo "last_tag=${last_tag}" >> "${output}"
 # Split on IFS whitespace so GitHub multiline `paths:` inputs work.
 # shellcheck disable=SC2206
 pathspecs=(${PATHS:-})
-if [ "${#pathspecs[@]}" -eq 0 ]; then
+if [[ "${#pathspecs[@]}" -eq 0 ]]; then
   echo "PATHS is required" >&2
   exit 1
 fi

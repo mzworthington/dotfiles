@@ -55,13 +55,13 @@ if [[ "${INSTALL_AI}" == "1" ]]; then
   echo "==> Installing software outside brew/mise…"
   if ! command -v unsloth &>/dev/null; then
     echo "Installing Unsloth…"
-    curl -fsSL https://unsloth.ai/install.sh | sh
+    curl --proto '=https' --tlsv1.2 -fsSL https://unsloth.ai/install.sh | sh
   else
     echo "Unsloth already installed"
   fi
 
   if ! command -v dcode &>/dev/null; then
-    curl -LsSf https://langch.in/dcode | bash
+    curl --proto '=https' --tlsv1.2 -LsSf https://langch.in/dcode | bash
   fi
 fi
 

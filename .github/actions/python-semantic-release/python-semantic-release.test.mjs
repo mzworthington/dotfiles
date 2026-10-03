@@ -156,7 +156,9 @@ fi
   const outputFile = join(cwd, "gha-output");
   writeFileSync(outputFile, "");
   run(cwd, { GITHUB_OUTPUT: outputFile });
-  assert.equal(srCalls(cwd), "SEE");
+  const calls = srCalls(cwd);
+  assert.match(calls, /^env= args=version --no-push --no-tag$/m);
+  assert.match(calls, /^env=.+ args=publish$/m);
 });
 
 test("runs version, fast-forwards main, and publishes when a release is due", async () => {

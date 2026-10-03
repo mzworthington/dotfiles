@@ -82,6 +82,63 @@ test("does not retag pyproject version when a v-star tag exists but does not des
   assert.deepEqual(tags(cwd), ["v1.2.3"]);
 });
 
+test("rebases a local release commit onto origin/main and pushes that fast-forward", async () => {
+  const cwd = await initRepo();
+  execFileSync("git", ["tag", "v1.0.0"], { cwd });
+  const binDir = join(cwd, ".venv", "bin");
+  mkdirSync(binDir, { recursive: true });
+  writeFileSync(
+    join(binDir, "semantic-release"),
+    `#!/usr/bin/env bash
+set -euo pipefail
+printf '%s\\n' "$*" >> "\${PWD}/.sr-calls"
+if [[ "\${1:-}" == "version" && "\${2:-}" == "--print" ]]; then
+  echo "1.2.4"
+  exit 0
+fi
+if [[ "\${1:-}" == "version" && "$*" == *"--no-push"* ]]; then
+  printf '[project]\\nname = "demo"\\nversion = "1.2.4"\\n' > pyproject.toml
+  git add pyproject.toml
+  git commit -m "chore(release): 1.2.4"
+  exit 0
+fi
+if [[ "\${1:-}" == "publish" ]]; then
+  exit 0
+fi
+echo "unexpected args: $*" >&2
+exit 1
+`,
+  );
+  chmodSync(join(binDir, "semantic-release"), 0o755);
+  const origin = await mkdtemp(join(tmpdir(), "python-release-origin-"));
+  execFileSync("git", ["clone", "--bare", cwd, origin]);
+  execFileSync("git", ["remote", "add", "origin", origin], { cwd });
+  const other = await mkdtemp(join(tmpdir(), "python-release-other-"));
+  execFileSync("git", ["clone", origin, other]);
+  execFileSync("git", ["config", "user.email", "other@example.com"], { cwd: other });
+  execFileSync("git", ["config", "user.name", "Other"], { cwd: other });
+  writeFileSync(join(other, "moved.txt"), "landed while releasing\n");
+  execFileSync("git", ["add", "moved.txt"], { cwd: other });
+  execFileSync("git", ["commit", "-m", "landed on main"], { cwd: other });
+  execFileSync("git", ["push", "origin", "HEAD:main"], { cwd: other });
+  execFileSync("bash", [script], { cwd });
+  const originLog = execFileSync("git", ["log", "--format=%s", "main"], {
+    cwd: origin,
+    encoding: "utf8",
+  });
+  assert.match(originLog, /chore\(release\): 1\.2\.4/);
+  assert.match(originLog, /landed on main/);
+  const tagTarget = execFileSync("git", ["rev-parse", "v1.2.4^{}"], {
+    cwd: origin,
+    encoding: "utf8",
+  }).trim();
+  const releaseCommit = execFileSync("git", ["rev-parse", "main"], {
+    cwd: origin,
+    encoding: "utf8",
+  }).trim();
+  assert.equal(tagTarget, releaseCommit);
+});
+
 test("runs version, fast-forwards main, and publishes when a release is due", async () => {
   const cwd = await initRepo();
   execFileSync("git", ["tag", "v1.0.0"], { cwd });
@@ -92,7 +149,7 @@ test("runs version, fast-forwards main, and publishes when a release is due", as
   execFileSync("bash", [script], { cwd });
   const calls = readFileSync(join(cwd, ".sr-calls"), "utf8");
   assert.match(calls, /^version --print$/m);
-  assert.match(calls, /^version$/m);
+  assert.match(calls, /^version --no-push --no-tag$/m);
   assert.match(calls, /^publish$/m);
 });
 
@@ -108,7 +165,7 @@ test("force-level minor still publishes when print would skip", async () => {
     env: { ...process.env, FORCE_LEVEL: "minor" },
   });
   const calls = readFileSync(join(cwd, ".sr-calls"), "utf8");
-  assert.match(calls, /^version --minor$/m);
+  assert.match(calls, /^version --minor --no-push --no-tag$/m);
   assert.match(calls, /^publish$/m);
   assert.doesNotMatch(calls, /^version --print$/m);
 });
@@ -126,7 +183,7 @@ test("bumps from the latest v-star tag when print reports a stale 0.1.0 skip", a
   execFileSync("bash", [script], { cwd });
   const calls = readFileSync(join(cwd, ".sr-calls"), "utf8");
   assert.match(calls, /^version --print$/m);
-  assert.match(calls, /^version --minor$/m);
+  assert.match(calls, /^version --minor --no-push --no-tag$/m);
   assert.match(calls, /^publish$/m);
 });
 
@@ -162,6 +219,6 @@ exit 1
   execFileSync("git", ["checkout", "--detach"], { cwd });
   execFileSync("bash", [script], { cwd });
   const calls = readFileSync(join(cwd, ".sr-calls"), "utf8");
-  assert.match(calls, /^version$/m);
+  assert.match(calls, /^version --no-push --no-tag$/m);
   assert.match(calls, /^publish$/m);
 });

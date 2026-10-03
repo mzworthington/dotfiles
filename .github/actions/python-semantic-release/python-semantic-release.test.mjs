@@ -140,6 +140,24 @@ test("rebases a local release commit onto origin/main and pushes that fast-forwa
   );
 });
 
+test("drops GITHUB_OUTPUT for version --no-tag so a missing commit_sha does not fail the step", async () => {
+  const cwd = await initRepo();
+  git(cwd, ["tag", "v1.0.0"]);
+  writeStub(cwd, {
+    print: "1.2.4",
+    onNoPush: `if [[ "\${1:-}" == "version" && " \$* " == *" --no-tag "* && -n "\${GITHUB_OUTPUT:-}" ]]; then
+  echo "some required outputs were not set: commit_sha" >&2
+  exit 1
+fi
+`,
+  });
+  await addOrigin(cwd);
+  const outputFile = join(cwd, "gha-output");
+  writeFileSync(outputFile, "");
+  run(cwd, { GITHUB_OUTPUT: outputFile });
+  assert.match(srCalls(cwd), /^version --no-push --no-tag$/m);
+});
+
 test("runs version, fast-forwards main, and publishes when a release is due", async () => {
   const cwd = await initRepo();
   git(cwd, ["tag", "v1.0.0"]);

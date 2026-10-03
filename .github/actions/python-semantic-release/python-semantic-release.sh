@@ -29,7 +29,9 @@ fi
 publish_release() {
   local before after branch version tag notes
   before="$(git rev-parse HEAD)"
-  semantic-release version "$@" --no-push --no-tag
+  # --no-tag skips the tag PSR uses to record commit_sha. With GITHUB_OUTPUT
+  # set, that missing output fails the step after the build succeeds.
+  GITHUB_OUTPUT="" semantic-release version "$@" --no-push --no-tag
   after="$(git rev-parse HEAD)"
   if [[ "${before}" == "${after}" ]]; then
     echo "No release commit; skipping push."

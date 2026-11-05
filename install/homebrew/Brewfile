@@ -36,3 +36,6 @@ brew "scorecard"
 
 brew "cloudflared"
 brew "cloudflare-wrangler"
+
+# linux filesystem tools
+brew "e2fsprogs"

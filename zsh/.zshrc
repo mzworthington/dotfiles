@@ -86,3 +86,7 @@ export SIGNOZ_URL="${SIGNOZ_URL:-http://localhost:8080}"
 
 # After mise/homebrew PATH mutations so these win over brew `docker`.
 export PATH="$DOTFILES_DIR/bin:$PATH"
+export PATH=/opt/homebrew/opt/e2fsprogs/bin:$PATH
+export PATH=/opt/homebrew/opt/e2fsprogs/sbin:$PATH
+
+. "/tmp/uv-new/env"

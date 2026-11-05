@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Clone optional companion repositories.
+# Clone missing companion repositories and fast-forward existing checkouts.
+# Local work is stashed first and restored after the pull.
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -13,6 +14,7 @@ clone_repo() {
   local path="$3"
   local install_script="${4:-}"
   local optional="${5:-0}"
+  local stashed=0
 
   path="${path/#\~/$HOME}"
 
@@ -21,7 +23,24 @@ clone_repo() {
   fi
 
   if [[ -d "${path}/.git" ]]; then
-    echo "OK: ${name} already cloned at ${path}"
+    echo "==> Updating ${name}…"
+    if [[ -n "$(git -C "${path}" status --porcelain)" ]]; then
+      git -C "${path}" stash push --include-untracked -m "repos.sh: ${name}"
+      stashed=1
+    fi
+    if ! git -C "${path}" pull --ff-only; then
+      if [[ "${stashed}" == "1" ]]; then
+        git -C "${path}" stash pop
+      fi
+      if [[ "${optional}" == "1" ]]; then
+        echo "WARN: optional repo ${name} failed to update"
+        return 0
+      fi
+      return 1
+    fi
+    if [[ "${stashed}" == "1" ]] && ! git -C "${path}" stash pop; then
+      return 1
+    fi
   else
     mkdir -p "$(dirname "${path}")"
     echo "==> Cloning ${name}…"
